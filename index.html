@@ -35,17 +35,17 @@
   body {
     margin: 0;
     padding:
-      max(16px, env(safe-area-inset-top))
-      max(12px, env(safe-area-inset-right))
-      max(48px, env(safe-area-inset-bottom))
-      max(12px, env(safe-area-inset-left));
+      max(10px, env(safe-area-inset-top))
+      max(10px, env(safe-area-inset-right))
+      max(28px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left));
     background: var(--bg);
     color: var(--text);
     font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
   }
 
   .app {
-    width: min(760px, 100%);
+    width: min(680px, 100%);
     margin: 0 auto;
   }
 
@@ -53,7 +53,7 @@
     position: sticky;
     top: 0;
     z-index: 40;
-    padding: 2px 0 6px;
+    padding: 0 0 4px;
     background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(8px);
   }
@@ -61,12 +61,12 @@
   .hero {
     display: flex;
     align-items: center;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
 
   .hero h1 {
     margin: 0;
-    font-size: clamp(14px, 3.8vw, 18px);
+    font-size: clamp(13px, 3.4vw, 16px);
     letter-spacing: 0.12em;
     font-weight: 700;
   }
@@ -74,8 +74,8 @@
   .btn {
     border: none;
     border-radius: 999px;
-    padding: 8px 14px;
-    font-size: 12px;
+    padding: 7px 12px;
+    font-size: 11px;
     font-family: inherit;
     cursor: pointer;
   }
@@ -95,18 +95,18 @@
   .panel {
     background: var(--panel);
     border: 1px solid var(--line);
-    border-radius: 24px;
+    border-radius: 18px;
     box-shadow: var(--shadow);
   }
 
   .settings {
-    padding: 10px 10px 8px;
+    padding: 8px 8px 6px;
   }
 
   .settings-grid {
     display: grid;
     grid-template-columns: 0.45fr auto 0.45fr auto max-content 0.45fr 0.45fr;
-    gap: 8px;
+    gap: 6px;
     align-items: end;
   }
 
@@ -114,9 +114,9 @@
     display: flex;
     align-items: end;
     justify-content: flex-start;
-    padding-right: 28px;
-    padding-bottom: 7px;
-    font-size: 13px;
+    padding-right: 22px;
+    padding-bottom: 6px;
+    font-size: 12px;
     font-weight: 700;
     color: #74563f;
     white-space: nowrap;
@@ -126,8 +126,8 @@
     display: flex;
     align-items: end;
     justify-content: center;
-    padding-bottom: 9px;
-    font-size: 14px;
+    padding-bottom: 8px;
+    font-size: 12px;
     font-weight: 900;
     color: #8c7862;
     white-space: nowrap;
@@ -135,8 +135,8 @@
 
   .setting-item label {
     display: block;
-    margin-bottom: 3px;
-    font-size: 9px;
+    margin-bottom: 2px;
+    font-size: 8px;
     color: var(--muted);
     letter-spacing: 0.05em;
   }
@@ -144,8 +144,8 @@
   .setting-item input {
     width: 100%;
     border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 7px 8px;
+    border-radius: 8px;
+    padding: 6px 7px;
     background: #fff;
     color: var(--text);
     font-size: 16px;
@@ -162,13 +162,13 @@
 
   .main {
     display: grid;
-    gap: 14px;
+    gap: 10px;
   }
 
   .total-card {
     position: sticky;
     top: calc(var(--sticky-top, 120px) + 6px);
-    padding: 16px;
+    padding: 12px;
     border-width: 2px;
     border-color: #d7cab8;
   }
@@ -177,27 +177,27 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    margin: -16px -16px 16px;
-    padding: 8px 12px;
+    gap: 10px;
+    margin: -12px -12px 12px;
+    padding: 7px 10px;
     background: #efeadf;
     border-bottom: 2px solid #d7cab8;
-    border-radius: 24px 24px 0 0;
+    border-radius: 18px 18px 0 0;
   }
 
   .card-label {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 900;
     color: #74563f;
     line-height: 1;
-    padding-left: 12px;
+    padding-left: 8px;
   }
 
   .card-head-stats {
     display: flex;
     align-items: baseline;
     justify-content: flex-end;
-    gap: 14px;
+    gap: 10px;
     flex-wrap: wrap;
     min-width: 0;
   }
@@ -205,18 +205,18 @@
   .card-head-stat {
     display: flex;
     align-items: baseline;
-    gap: 6px;
+    gap: 4px;
   }
 
   .card-head-stat strong {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     color: #8c7862;
     white-space: nowrap;
   }
 
   .card-head-stat span {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 900;
     color: #74563f;
     line-height: 1;
@@ -229,29 +229,29 @@
 
   .layout {
     display: grid;
-    gap: 14px;
+    gap: 10px;
   }
 
   .total-inner {
     padding: 0;
     display: grid;
-    gap: 14px;
+    gap: 10px;
   }
 
   .tiles {
     display: grid;
-    gap: 12px;
+    gap: 10px;
   }
 
   .tiles-actions {
     display: flex;
     justify-content: center;
-    margin-top: 4px;
+    margin-top: 2px;
   }
 
   .input-tile {
     border: 2px solid var(--tile-line);
-    border-radius: 22px;
+    border-radius: 18px;
     background: #fff;
     overflow: hidden;
   }
@@ -259,14 +259,14 @@
   .tile-head {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
+    gap: 8px;
+    padding: 7px 10px;
     background: var(--tile-bg);
     border-bottom: 1px solid var(--tile-line);
   }
 
   .tile-no {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 900;
     color: #fff;
     line-height: 1;
@@ -277,8 +277,8 @@
     flex: 1;
     min-width: 0;
     border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 10px;
-    padding: 6px 10px;
+    border-radius: 8px;
+    padding: 5px 8px;
     background: rgba(255, 253, 248, 0.94);
     font-size: 16px;
     font-family: inherit;
@@ -288,15 +288,15 @@
 
   .tile-body {
     display: grid;
-    gap: 12px;
-    padding: 14px;
+    gap: 10px;
+    padding: 10px;
     background: var(--panel-strong);
   }
 
   .reading-field,
   .usage-field {
-    padding: 16px;
-    border-radius: 18px;
+    padding: 12px;
+    border-radius: 14px;
     border: 1px solid #ead7b6;
     background: rgba(255, 255, 255, 0.45);
   }
@@ -309,8 +309,8 @@
 
   .field-title {
     display: block;
-    margin-bottom: 10px;
-    font-size: 13px;
+    margin-bottom: 8px;
+    font-size: 12px;
     color: #665640;
     font-weight: 700;
   }
@@ -318,31 +318,31 @@
   .reading-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    gap: 10px;
+    gap: 8px;
     align-items: center;
   }
 
   .reading-input {
     min-width: 0;
     display: grid;
-    gap: 6px;
+    gap: 4px;
   }
 
   .reading-input-row {
     display: flex;
     align-items: baseline;
-    gap: 8px;
+    gap: 6px;
   }
 
   .reading-input input {
-    width: min(66%, 220px);
+    width: min(58%, 180px);
     min-width: 0;
     border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 12px 14px;
+    border-radius: 12px;
+    padding: 8px 10px;
     background: #fffefb;
     color: var(--text);
-    font-size: clamp(24px, 7vw, 34px);
+    font-size: clamp(18px, 5.4vw, 24px);
     font-weight: 700;
     font-family: inherit;
     text-align: right;
@@ -352,7 +352,7 @@
   }
 
   .reading-unit {
-    font-size: 18px;
+    font-size: 13px;
     font-weight: 700;
     color: #5c5348;
     line-height: 1;
@@ -360,7 +360,7 @@
   }
 
   .reading-input label {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     color: #5c5348;
     line-height: 1;
@@ -368,9 +368,9 @@
   }
 
   .reading-sub {
-    width: min(66%, 220px);
-    padding-right: 20px;
-    font-size: 11px;
+    width: min(58%, 180px);
+    padding-right: 10px;
+    font-size: 9px;
     color: #9a907f;
     line-height: 1.3;
     text-align: right;
@@ -381,7 +381,7 @@
     align-items: center;
     justify-content: center;
     align-self: stretch;
-    font-size: 36px;
+    font-size: 24px;
     font-weight: 900;
     color: var(--tile-line);
     line-height: 1;
@@ -390,17 +390,17 @@
 
   .usage-grid {
     display: grid;
-    gap: 8px;
+    gap: 6px;
   }
 
   .usage-line {
-    font-size: 18px;
+    font-size: 13px;
     line-height: 1.5;
     color: color-mix(in srgb, var(--tile-line) 70%, #244333 30%);
   }
 
   .usage-line-strong {
-    font-size: 28px;
+    font-size: 18px;
     font-weight: 900;
     line-height: 1;
     color: var(--text);
@@ -408,35 +408,35 @@
 
   .formula-panel {
     display: grid;
-    gap: 12px;
-    padding: 18px;
-    border-radius: 24px;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 18px;
     border: 2px solid #d7cab8;
     background: linear-gradient(180deg, #fffdfa 0%, #fbf5ec 100%);
   }
 
   .formula-step {
-    padding: 14px 16px;
+    padding: 11px 12px;
     border: 2px solid #d7cab8;
-    border-radius: 18px;
+    border-radius: 14px;
     background: #f7f1e7;
   }
 
   .formula-step strong {
     display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
+    margin-bottom: 4px;
+    font-size: 12px;
     color: var(--muted);
   }
 
   .formula-step div {
-    font-size: 18px;
+    font-size: 13px;
     line-height: 1.5;
     word-break: break-word;
   }
 
   .formula-strong {
-    font-size: 28px;
+    font-size: 18px;
     font-weight: 900;
     color: #74563f;
     line-height: 1;
@@ -449,9 +449,9 @@
 
   .result-box {
     display: grid;
-    gap: 10px;
-    padding: 18px;
-    border-radius: 22px;
+    gap: 8px;
+    padding: 14px;
+    border-radius: 16px;
     background: #f3ece1;
     border: 3px solid #d7cab8;
   }
@@ -460,17 +460,17 @@
     display: flex;
     align-items: end;
     justify-content: space-between;
-    gap: 12px;
+    gap: 8px;
     flex-wrap: wrap;
   }
 
   .result-main strong {
-    font-size: 14px;
+    font-size: 12px;
     color: #74563f;
   }
 
   .result-main span {
-    font-size: clamp(34px, 11vw, 52px);
+    font-size: clamp(24px, 8vw, 34px);
     font-weight: 900;
     color: #74563f;
     letter-spacing: 0.04em;
@@ -478,20 +478,20 @@
 
   .result-breakdown {
     display: grid;
-    gap: 6px;
-    font-size: 14px;
+    gap: 4px;
+    font-size: 12px;
     color: #74563f;
   }
 
   .result-table {
     display: grid;
-    gap: 6px;
+    gap: 4px;
   }
 
   .result-row {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
     align-items: baseline;
   }
 
@@ -500,13 +500,13 @@
   }
 
   .result-head .result-cell {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     color: #8c7862;
   }
 
   .result-head {
-    padding-bottom: 4px;
+    padding-bottom: 3px;
     border-bottom: 1px solid #d7cab8;
   }
 
@@ -519,7 +519,7 @@
   }
 
   .result-value {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 800;
     color: #74563f;
     line-height: 1.2;
@@ -531,7 +531,110 @@
     }
 
     .settings-grid {
-      grid-template-columns: 0.45fr auto 0.45fr auto max-content 0.45fr 0.45fr;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px 6px;
+    }
+
+    .setting-operator,
+    .setting-item-display {
+      display: none;
+    }
+
+    .main {
+      gap: 8px;
+    }
+
+    .total-card {
+      padding: 10px;
+    }
+
+    .card-head {
+      align-items: flex-start;
+      gap: 8px;
+      margin: -10px -10px 10px;
+      padding: 7px 8px;
+    }
+
+    .card-label {
+      font-size: 15px;
+      padding-left: 4px;
+    }
+
+    .card-head-stats {
+      gap: 8px;
+      justify-content: flex-start;
+    }
+
+    .card-head-stat {
+      gap: 3px;
+    }
+
+    .card-head-stat strong {
+      font-size: 9px;
+    }
+
+    .card-head-stat span {
+      font-size: 16px;
+    }
+
+    .tile-no {
+      font-size: 16px;
+    }
+
+    .tile-head input {
+      padding: 4px 8px;
+    }
+
+    .reading-field,
+    .usage-field,
+    .formula-panel,
+    .result-box {
+      padding: 10px;
+    }
+
+    .reading-grid {
+      grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr);
+      gap: 6px;
+    }
+
+    .reading-input input {
+      width: 100%;
+      max-width: none;
+      padding: 8px 8px;
+      font-size: clamp(16px, 4.8vw, 20px);
+    }
+
+    .reading-sub {
+      width: 100%;
+      padding-right: 4px;
+    }
+
+    .reading-arrow {
+      font-size: 20px;
+    }
+
+    .usage-line {
+      font-size: 12px;
+    }
+
+    .usage-line-strong {
+      font-size: 16px;
+    }
+
+    .formula-step div {
+      font-size: 12px;
+    }
+
+    .formula-strong {
+      font-size: 16px;
+    }
+
+    .result-main span {
+      font-size: clamp(21px, 7vw, 28px);
+    }
+
+    .result-value {
+      font-size: 13px;
     }
   }
 </style>
