@@ -3,153 +3,846 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LPガス 納品書（点検通知書）</title>
+<title>GAS-SLIP</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: "MS Mincho", "游明朝", serif; background: #f0f0f0; padding: 20px; }
-  .page { background: white; width: 760px; margin: 0 auto 40px; padding: 20px; border: 2px solid #333; }
-  .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-  .date-box { border: 1px solid #333; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; font-size: 14px; }
-  .date-box input { width: 40px; border: none; border-bottom: 1px solid #999; text-align: center; font-size: 14px; font-family: inherit; }
-  .company-info { text-align: right; font-size: 11px; line-height: 1.6; }
-  .customer-row { display: flex; align-items: baseline; gap: 8px; margin: 8px 0; font-size: 15px; }
-  .customer-row input { border: none; border-bottom: 1px solid #666; font-size: 15px; font-family: inherit; min-width: 200px; }
-  .doc-title { text-align: center; font-size: 16px; font-weight: bold; border: 1px solid #333; padding: 4px; margin: 6px 0; letter-spacing: 4px; }
-  .doc-subtitle { text-align: center; font-size: 10px; margin-bottom: 8px; }
-  .main-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  .main-table th, .main-table td { border: 1px solid #333; padding: 3px 5px; text-align: center; vertical-align: middle; }
-  .main-table th { background: #eee; font-size: 11px; }
-  .main-table input[type="number"], .main-table input[type="text"] { width: 100%; border: none; text-align: center; font-size: 12px; font-family: inherit; background: transparent; }
-  .label-cell { text-align: left; font-size: 11px; background: #fafafa; }
-  .calc-box { border: 1px solid #999; padding: 8px 12px; margin: 8px 0; font-size: 13px; background: #fffef5; min-height: 60px; }
-  .calc-result { font-size: 18px; font-weight: bold; text-align: right; }
-  .footer-row { display: flex; justify-content: space-between; font-size: 11px; margin-top: 8px; }
-  .tax-row { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 4px 0; }
-  .settings { background: white; width: 760px; margin: 0 auto 40px; padding: 20px; border: 2px dashed #999; }
-  .settings h2 { font-size: 14px; margin-bottom: 12px; color: #555; border-bottom: 1px solid #ccc; padding-bottom: 6px; }
-  .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .setting-item { display: flex; flex-direction: column; gap: 4px; }
-  .setting-item label { font-size: 11px; color: #666; }
-  .setting-item input { border: 1px solid #ccc; padding: 5px 8px; font-size: 14px; font-family: inherit; border-radius: 3px; }
-  .btn-add { background: #5a8a2c; color: white; border: none; padding: 8px 18px; font-size: 13px; font-family: inherit; cursor: pointer; border-radius: 3px; margin: 0 auto 20px; display: block; }
-  .stamp-area { font-size: 10px; border: 1px solid #ccc; padding: 4px; text-align: center; width: 60px; }
+  :root {
+    --bg: #ffffff;
+    --panel: #fffdf8;
+    --panel-strong: #fff7e8;
+    --line: #d7cab8;
+    --text: #2d2419;
+    --muted: #6d6357;
+    --accent: #b85c38;
+    --result: #234f3a;
+    --result-soft: #e3f0e8;
+    --shadow: 0 18px 44px rgba(73, 49, 28, 0.08);
+    --tile-1-bg: #79c89c;
+    --tile-1-line: #56af7d;
+    --tile-2-bg: #7f9cf5;
+    --tile-2-line: #5f7ee3;
+    --tile-3-bg: #f29b7a;
+    --tile-3-line: #e07c56;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 16px 12px 48px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  }
+
+  .app {
+    width: min(760px, 100%);
+    margin: 0 auto;
+  }
+
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    padding: 2px 0 6px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
+  }
+
+  .hero {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .hero h1 {
+    margin: 0;
+    font-size: clamp(14px, 3.8vw, 18px);
+    letter-spacing: 0.12em;
+    font-weight: 700;
+  }
+
+  .btn {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 12px 22px rgba(184, 92, 56, 0.18);
+  }
+
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+  }
+
+  .settings {
+    padding: 10px 10px 8px;
+  }
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 0.45fr auto 0.45fr auto max-content 0.45fr 0.45fr;
+    gap: 8px;
+    align-items: end;
+  }
+
+  .setting-item-display {
+    display: flex;
+    align-items: end;
+    justify-content: flex-start;
+    padding-right: 28px;
+    padding-bottom: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #74563f;
+    white-space: nowrap;
+  }
+
+  .setting-operator {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    padding-bottom: 9px;
+    font-size: 14px;
+    font-weight: 900;
+    color: #8c7862;
+    white-space: nowrap;
+  }
+
+  .setting-item label {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .setting-item input {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 7px 8px;
+    background: #fff;
+    color: var(--text);
+    font-size: 13px;
+    font-family: inherit;
+  }
+
+  .setting-item input:focus,
+  .reading-input input:focus {
+    outline: 2px solid rgba(184, 92, 56, 0.22);
+    border-color: var(--accent);
+  }
+
+  .main {
+    display: grid;
+    gap: 14px;
+  }
+
+  .total-card {
+    position: sticky;
+    top: calc(var(--sticky-top, 120px) + 6px);
+    padding: 16px;
+    border-width: 2px;
+    border-color: #d7cab8;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: -16px -16px 16px;
+    padding: 8px 12px;
+    background: #efeadf;
+    border-bottom: 2px solid #d7cab8;
+    border-radius: 24px 24px 0 0;
+  }
+
+  .card-label {
+    font-size: 18px;
+    font-weight: 900;
+    color: #74563f;
+    line-height: 1;
+    padding-left: 12px;
+  }
+
+  .card-head-stats {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  .card-head-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .card-head-stat strong {
+    font-size: 11px;
+    font-weight: 700;
+    color: #8c7862;
+    white-space: nowrap;
+  }
+
+  .card-head-stat span {
+    font-size: 22px;
+    font-weight: 900;
+    color: #74563f;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  #head_total_amount {
+    padding-right: 4px;
+  }
+
+  .layout {
+    display: grid;
+    gap: 14px;
+  }
+
+  .total-inner {
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .tiles {
+    display: grid;
+    gap: 12px;
+  }
+
+  .tiles-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  .input-tile {
+    border: 2px solid var(--tile-line);
+    border-radius: 22px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .tile-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: var(--tile-bg);
+    border-bottom: 1px solid var(--tile-line);
+  }
+
+  .tile-no {
+    font-size: 22px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+  }
+
+  .tile-head input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    padding: 6px 10px;
+    background: rgba(255, 253, 248, 0.94);
+    font-size: 13px;
+    font-family: inherit;
+  }
+
+  .tile-body {
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+    background: var(--panel-strong);
+  }
+
+  .reading-field,
+  .usage-field {
+    padding: 16px;
+    border-radius: 18px;
+    border: 1px solid #ead7b6;
+    background: rgba(255, 255, 255, 0.45);
+  }
+
+  .usage-field {
+    background: color-mix(in srgb, var(--tile-bg) 18%, #ffffff 82%);
+    border-color: color-mix(in srgb, var(--tile-line) 55%, #ffffff 45%);
+    border-width: 2px;
+  }
+
+  .field-title {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #665640;
+    font-weight: 700;
+  }
+
+  .reading-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+  }
+
+  .reading-input {
+    min-width: 0;
+    display: grid;
+    gap: 6px;
+  }
+
+  .reading-input-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .reading-input input {
+    width: min(66%, 220px);
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 12px 14px;
+    background: #fffefb;
+    color: var(--text);
+    font-size: clamp(24px, 7vw, 34px);
+    font-weight: 700;
+    font-family: inherit;
+    text-align: right;
+    line-height: 1;
+  }
+
+  .reading-unit {
+    font-size: 18px;
+    font-weight: 700;
+    color: #5c5348;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .reading-input label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #5c5348;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .reading-sub {
+    width: min(66%, 220px);
+    padding-right: 20px;
+    font-size: 11px;
+    color: #9a907f;
+    line-height: 1.3;
+    text-align: right;
+  }
+
+  .reading-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--tile-line);
+    line-height: 1;
+    letter-spacing: -0.08em;
+  }
+
+  .usage-grid {
+    display: grid;
+    gap: 8px;
+  }
+
+  .usage-line {
+    font-size: 18px;
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--tile-line) 70%, #244333 30%);
+  }
+
+  .usage-line-strong {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .formula-panel {
+    display: grid;
+    gap: 12px;
+    padding: 18px;
+    border-radius: 24px;
+    border: 2px solid #d7cab8;
+    background: linear-gradient(180deg, #fffdfa 0%, #fbf5ec 100%);
+  }
+
+  .formula-step {
+    padding: 14px 16px;
+    border: 2px solid #d7cab8;
+    border-radius: 18px;
+    background: #f7f1e7;
+  }
+
+  .formula-step strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .formula-step div {
+    font-size: 18px;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  .formula-strong {
+    font-size: 28px;
+    font-weight: 900;
+    color: #74563f;
+    line-height: 1;
+  }
+
+  .inline-strong {
+    font-weight: 900;
+    color: #74563f;
+  }
+
+  .result-box {
+    display: grid;
+    gap: 10px;
+    padding: 18px;
+    border-radius: 22px;
+    background: #f3ece1;
+    border: 3px solid #d7cab8;
+  }
+
+  .result-main {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .result-main strong {
+    font-size: 14px;
+    color: #74563f;
+  }
+
+  .result-main span {
+    font-size: clamp(34px, 11vw, 52px);
+    font-weight: 900;
+    color: #74563f;
+    letter-spacing: 0.04em;
+  }
+
+  .result-breakdown {
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+    color: #74563f;
+  }
+
+  .result-table {
+    display: grid;
+    gap: 6px;
+  }
+
+  .result-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .result-cell {
+    line-height: 1.5;
+  }
+
+  .result-head .result-cell {
+    font-size: 12px;
+    font-weight: 700;
+    color: #8c7862;
+  }
+
+  .result-head {
+    padding-bottom: 4px;
+    border-bottom: 1px solid #d7cab8;
+  }
+
+  .result-total .result-cell {
+    font-weight: 700;
+  }
+
+  .result-row .result-cell:nth-child(3) {
+    text-align: right;
+  }
+
+  .result-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: #74563f;
+    line-height: 1.2;
+  }
+
+  @media (max-width: 640px) {
+    .settings-grid {
+      grid-template-columns: 0.45fr auto 0.45fr auto max-content 0.45fr 0.45fr;
+    }
+  }
 </style>
 </head>
 <body>
+  <div class="app">
+    <div class="app-header">
+      <header class="hero">
+        <h1>GAS-SLIP</h1>
+      </header>
 
-<button class="btn-add" onclick="addSlip()">＋ 納品書を追加</button>
-<div id="slips"></div>
+      <aside class="panel settings">
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label for="cfg_base_price">単価</label>
+            <input type="number" id="cfg_base_price" value="143.4" step="0.1">
+          </div>
+          <div class="setting-operator">+</div>
+          <div class="setting-item">
+            <label for="cfg_tax_amount">補正額</label>
+            <input type="number" id="cfg_tax_amount" value="11" step="0.1">
+          </div>
+          <div class="setting-operator">=</div>
+          <div class="setting-item-display" id="cfg_adjusted_price_display">154.4円</div>
+          <div class="setting-item">
+            <label for="cfg_conversion">換算係数</label>
+            <input type="number" id="cfg_conversion" value="0.48" step="0.01">
+          </div>
+          <div class="setting-item">
+            <label for="cfg_tax">消費税率</label>
+            <input type="number" id="cfg_tax" value="1.1" step="0.01">
+          </div>
+        </div>
+      </aside>
+    </div>
 
-<div class="settings">
-  <h2>⚙ 設定値（共通）</h2>
-  <div class="settings-grid">
-    <div class="setting-item">
-      <label>単価（円/kg）</label>
-      <input type="number" id="cfg_unit_price" value="154.4" step="0.1" onchange="recalcAll()">
-    </div>
-    <div class="setting-item">
-      <label>体積重量変換係数（m³→kg）</label>
-      <input type="number" id="cfg_conversion" value="0.48" step="0.01" onchange="recalcAll()">
-    </div>
-    <div class="setting-item">
-      <label>消費税率（例: 1.1 = 10%）</label>
-      <input type="number" id="cfg_tax" value="1.1" step="0.01" onchange="recalcAll()">
-    </div>
-    <div class="setting-item">
-      <label>基本料金（円）</label>
-      <input type="number" id="cfg_base" value="230" step="1" onchange="recalcAll()">
-    </div>
+    <main class="main">
+      <article class="panel total-card">
+        <div class="card-head">
+          <div class="card-label">TOTAL</div>
+          <div class="card-head-stats">
+            <div class="card-head-stat">
+              <strong>使用量</strong>
+              <span id="head_total_usage">0.0kg</span>
+            </div>
+            <div class="card-head-stat">
+              <strong>税込</strong>
+              <span id="head_total_amount">0円</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="layout">
+          <section class="tiles">
+            <div id="tiles"></div>
+            <div class="tiles-actions">
+              <button class="btn btn-primary" type="button" id="add-tile-btn">＋ 入力タイルを追加</button>
+            </div>
+          </section>
+
+          <div class="total-inner">
+            <section class="formula-panel">
+              <div class="formula-step">
+                <strong>合計使用量</strong>
+                <div id="total_usage_m3">0.0 m3</div>
+              </div>
+
+              <div class="formula-step">
+                <strong>合計金額（補正）</strong>
+                <div id="total_formula">0.0 ÷ 0.48 × 154.4 × 1.10 = 0 円</div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-main">
+                  <strong>税込</strong>
+                  <span id="grand_total">0円</span>
+                </div>
+                <div class="result-breakdown">
+                  <div class="result-table">
+                    <div class="result-row result-head">
+                      <div class="result-cell">数量(kg)</div>
+                      <div class="result-cell">単価</div>
+                      <div class="result-cell">金額</div>
+                    </div>
+                    <div class="result-row">
+                      <div class="result-cell result-value" id="grand_qty">0.0</div>
+                      <div class="result-cell result-value" id="grand_unit">143.4</div>
+                      <div class="result-cell result-value" id="grand_amount">0円</div>
+                    </div>
+                    <div class="result-row">
+                      <div class="result-cell"></div>
+                      <div class="result-cell">消費税</div>
+                      <div class="result-cell result-value" id="grand_tax">0円</div>
+                    </div>
+                    <div class="result-row result-total">
+                      <div class="result-cell"></div>
+                      <div class="result-cell">計</div>
+                      <div class="result-cell result-value" id="grand_sum">0円</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </article>
+    </main>
   </div>
-</div>
 
 <script>
-let slipCount = 0;
+const MAX_TILES = 20;
+let tileCount = 0;
+
+function truncateDecimals(value, digits) {
+  const factor = 10 ** digits;
+  return Math.trunc(Number(value) * factor) / factor;
+}
+
+function formatNumber(value, digits) {
+  return Number(value).toLocaleString('ja-JP', {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  });
+}
+
+function formatTruncated(value, digits) {
+  return formatNumber(truncateDecimals(value, digits), digits);
+}
+
+function formatYen(value) {
+  return `${Math.round(value).toLocaleString('ja-JP')} 円`;
+}
+
 function getSettings() {
+  const basePrice = parseFloat(document.getElementById('cfg_base_price').value) || 0;
+  const taxAmount = parseFloat(document.getElementById('cfg_tax_amount').value) || 0;
   return {
-    unitPrice: parseFloat(document.getElementById('cfg_unit_price').value) || 0,
+    basePrice,
+    taxAmount,
+    unitPrice: basePrice + taxAmount,
     conversion: parseFloat(document.getElementById('cfg_conversion').value) || 1,
     tax: parseFloat(document.getElementById('cfg_tax').value) || 1,
-    base: parseFloat(document.getElementById('cfg_base').value) || 0,
   };
 }
-function calcSlip(id) {
-  const cfg = getSettings();
-  const cur = parseFloat(document.getElementById(`cur_${id}`).value) || 0;
-  const prev = parseFloat(document.getElementById(`prev_${id}`).value) || 0;
-  const usage_m3 = cur - prev;
-  const usage_kg = usage_m3 / cfg.conversion;
-  const subtotal = cfg.base + cfg.unitPrice * usage_kg * cfg.tax;
-  const tax_amount = Math.round(subtotal - subtotal / cfg.tax);
-  const total = Math.round(subtotal);
-  document.getElementById(`usage_${id}`).textContent = usage_m3.toFixed(1);
-  document.getElementById(`usage_kg_${id}`).textContent = usage_kg.toFixed(1);
-  const formula = `${usage_m3.toFixed(1)} m³ ÷ ${cfg.conversion} = ${usage_kg.toFixed(1)} kg　→　${cfg.base} + ${cfg.unitPrice} × ${usage_kg.toFixed(1)} × ${cfg.tax} = ${total.toLocaleString()} 円`;
-  document.getElementById(`calc_${id}`).textContent = formula;
-  document.getElementById(`result_${id}`).textContent = `= ${total.toLocaleString()} 円`;
-  document.getElementById(`tax_disp_${id}`).textContent = `消費税 ${tax_amount.toLocaleString()} 円`;
-  document.getElementById(`total_disp_${id}`).textContent = `計　${total.toLocaleString()} 円`;
+
+function updateStickyTop() {
+  const header = document.querySelector('.app-header');
+  if (!header) return;
+  document.documentElement.style.setProperty('--sticky-top', `${header.offsetHeight + 8}px`);
 }
-function recalcAll() {
-  for (let i = 1; i <= slipCount; i++) {
-    if (document.getElementById(`cur_${i}`)) calcSlip(i);
+
+function updateAdjustedPriceDisplay() {
+  const basePrice = parseFloat(document.getElementById('cfg_base_price').value) || 0;
+  const taxAmount = parseFloat(document.getElementById('cfg_tax_amount').value) || 0;
+  const adjusted = basePrice + taxAmount;
+  document.getElementById('cfg_adjusted_price_display').textContent =
+    `${formatNumber(adjusted, 1)}円`;
+}
+
+function getTileUsage(id) {
+  const cur = document.getElementById(`cur_m3_${id}`);
+  const prev = document.getElementById(`prev_m3_${id}`);
+  const current = parseFloat(cur?.value) || 0;
+  const previous = parseFloat(prev?.value) || 0;
+  const usageM3 = truncateDecimals(current - previous, 1);
+  return usageM3;
+}
+
+function updateTileUsage(id) {
+  const cfg = getSettings();
+  const memoValue = document.getElementById(`memo_${id}`)?.value.trim() || '';
+  const curValue = parseFloat(document.getElementById(`cur_m3_${id}`)?.value) || 0;
+  const prevValue = parseFloat(document.getElementById(`prev_m3_${id}`)?.value) || 0;
+  const curKg = cfg.conversion === 0 ? 0 : truncateDecimals(curValue / cfg.conversion, 1);
+  const prevKg = cfg.conversion === 0 ? 0 : truncateDecimals(prevValue / cfg.conversion, 1);
+  const usageM3 = getTileUsage(id);
+  const usageKgRaw = cfg.conversion === 0 ? 0 : usageM3 / cfg.conversion;
+  const usageKg = cfg.conversion === 0 ? 0 : truncateDecimals(usageKgRaw, 1);
+  const amount = Math.round(usageKgRaw * cfg.unitPrice * cfg.tax);
+  const conversionText = formatNumber(truncateDecimals(cfg.conversion, 2), 2);
+
+  document.getElementById(`cur_kg_hint_${id}`).textContent = `${formatTruncated(curKg, 1)} kg`;
+  document.getElementById(`prev_kg_hint_${id}`).textContent = `${formatTruncated(prevKg, 1)} kg`;
+  document.getElementById(`usage_title_${id}`).textContent = memoValue ? `${memoValue} 使用量` : '使用量';
+  document.getElementById(`usage_line1_${id}`).textContent =
+    '';
+  document.getElementById(`usage_line1_${id}`).innerHTML =
+    `<span class="usage-line-strong">${formatTruncated(usageM3, 1)}㎥</span> ÷ ${conversionText} = ${formatTruncated(usageKg, 1)}kg`;
+  document.getElementById(`usage_line2_${id}`).textContent =
+    '';
+  document.getElementById(`usage_line2_${id}`).innerHTML =
+    `${formatTruncated(usageM3, 1)} ÷ ${conversionText} x <span class="inline-strong">${formatNumber(cfg.unitPrice, 1)}</span> x ${formatNumber(cfg.tax, 1)} = <span class="usage-line-strong">${amount.toLocaleString('ja-JP')}円</span>`;
+}
+
+function syncAllTiles() {
+  for (let i = 1; i <= tileCount; i += 1) {
+    if (!document.getElementById(`tile_${i}`)) continue;
+    updateTileUsage(i);
   }
 }
-function addSlip() {
-  slipCount++;
-  const id = slipCount;
-  const div = document.createElement('div');
-  div.className = 'page';
-  div.innerHTML = `
-    <div class="header-row">
-      <div class="date-box">
-        <input type="text" placeholder="年" style="width:36px"> 年
-        <input type="text" placeholder="月" style="width:28px"> 月
-        <input type="text" placeholder="日" style="width:28px"> 日
+
+function recalcTotal() {
+  const cfg = getSettings();
+  let totalUsageM3 = 0;
+  const usageParts = [];
+
+  for (let i = 1; i <= tileCount; i += 1) {
+    if (!document.getElementById(`tile_${i}`)) continue;
+    const usage = getTileUsage(i);
+    totalUsageM3 += usage;
+    usageParts.push(formatTruncated(usage, 1));
+  }
+
+  totalUsageM3 = truncateDecimals(totalUsageM3, 1);
+  const totalUsageKgRaw = cfg.conversion === 0 ? 0 : totalUsageM3 / cfg.conversion;
+  const totalUsageKg = cfg.conversion === 0 ? 0 : truncateDecimals(totalUsageKgRaw, 1);
+  const adjustedAmount = Math.round(totalUsageKgRaw * cfg.unitPrice * cfg.tax);
+  const lineAmount = Math.floor(totalUsageKg * cfg.basePrice);
+  const taxValue = Math.floor(lineAmount * (cfg.tax - 1));
+  const summaryAmount = lineAmount + taxValue;
+  const conversionText = formatNumber(truncateDecimals(cfg.conversion, 2), 2);
+  const joinedUsage = usageParts.length ? usageParts.map((part) => `${part}㎥`).join(' + ') : '0.0㎥';
+
+  document.getElementById('total_usage_m3').innerHTML =
+    `${joinedUsage} = <span class="formula-strong">${formatTruncated(totalUsageM3, 1)}㎥</span> ÷ ${conversionText} = <span class="formula-strong">${formatTruncated(totalUsageKg, 1)}kg</span>`;
+  document.getElementById('total_formula').innerHTML =
+    `${formatTruncated(totalUsageM3, 1)} ÷ ${conversionText} × <span class="inline-strong">${formatNumber(cfg.unitPrice, 1)}</span> × ${formatNumber(cfg.tax, 2)} = <span class="formula-strong">${adjustedAmount.toLocaleString('ja-JP')}円</span>`;
+  document.getElementById('grand_total').textContent = formatYen(summaryAmount);
+  document.getElementById('grand_qty').textContent = `${formatTruncated(totalUsageKg, 1)}`;
+  document.getElementById('grand_unit').textContent = `${formatNumber(cfg.basePrice, 1)}`;
+  document.getElementById('grand_amount').textContent = `${lineAmount.toLocaleString('ja-JP')}円`;
+  document.getElementById('grand_tax').textContent = `${taxValue.toLocaleString('ja-JP')}円`;
+  document.getElementById('grand_sum').textContent = `${summaryAmount.toLocaleString('ja-JP')}円`;
+  document.getElementById('head_total_usage').textContent = `${formatTruncated(totalUsageKg, 1)}kg`;
+  document.getElementById('head_total_amount').textContent = `${summaryAmount.toLocaleString('ja-JP')}円`;
+  updateStickyTop();
+}
+
+function bindEnterNavigation(root) {
+  root.querySelectorAll('input[data-next]').forEach((input) => {
+    input.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      const next = document.querySelector(event.currentTarget.dataset.next);
+      if (next) {
+        next.focus();
+        next.select?.();
+      }
+    });
+  });
+}
+
+function addTile() {
+  if (tileCount >= MAX_TILES) return;
+  tileCount += 1;
+  const id = tileCount;
+  const colorIndex = ((id - 1) % 3) + 1;
+  const tiles = document.getElementById('tiles');
+  const tile = document.createElement('section');
+  tile.className = 'input-tile';
+  tile.id = `tile_${id}`;
+  tile.style.setProperty('--tile-bg', `var(--tile-${colorIndex}-bg)`);
+  tile.style.setProperty('--tile-line', `var(--tile-${colorIndex}-line)`);
+  tile.innerHTML = `
+    <div class="tile-head">
+      <div class="tile-no">${String(id).padStart(2, '0')}</div>
+      <input type="text" id="memo_${id}" placeholder="任意">
+    </div>
+
+    <div class="tile-body">
+      <div class="reading-field">
+        <div class="reading-grid">
+          <div class="reading-input">
+            <label class="field-title" for="cur_m3_${id}">今回指針</label>
+            <div class="reading-input-row">
+              <input type="number" id="cur_m3_${id}" step="0.1" placeholder="0" data-next="#prev_m3_${id}">
+              <div class="reading-unit">㎥</div>
+            </div>
+            <div class="reading-sub" id="cur_kg_hint_${id}">0.0 kg</div>
+          </div>
+          <div class="reading-arrow">◀</div>
+          <div class="reading-input">
+            <label class="field-title" for="prev_m3_${id}">前回指針</label>
+            <div class="reading-input-row">
+              <input type="number" id="prev_m3_${id}" step="0.1" placeholder="0" data-next="#add-tile-btn">
+              <div class="reading-unit">㎥</div>
+            </div>
+            <div class="reading-sub" id="prev_kg_hint_${id}">0.0 kg</div>
+          </div>
+        </div>
       </div>
-      <div class="company-info">技術・サービスの店<br>㈱ 三ノ宮燃料<br>氷見市 仰田 6 2 4 1<br>TEL 9 1 - 4 1 1 1</div>
-    </div>
-    <div class="customer-row">
-      <input type="text" placeholder="お客様コード" style="width:80px">
-      <input type="text" placeholder="お客様名" style="width:240px"> 様
-      <div class="stamp-area">渡</div>
-    </div>
-    <div class="doc-title">納　品　書（点検通知書）</div>
-    <div class="doc-subtitle">当店のLPガスは現場責任住居検診です。</div>
-    <table class="main-table">
-      <tr><th>摘要</th><th>数量</th><th>単位</th><th>単価</th><th>金額</th></tr>
-      <tr>
-        <td class="label-cell">今回指針</td>
-        <td><input type="number" id="cur_${id}" placeholder="0" oninput="calcSlip(${id})"></td>
-        <td>m³</td><td>—</td>
-        <td rowspan="4">
-          <div class="calc-box" id="calc_${id}">今回・前回指針を入力してください</div>
-          <div class="calc-result" id="result_${id}"></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="label-cell">前回指針</td>
-        <td><input type="number" id="prev_${id}" placeholder="0" oninput="calcSlip(${id})"></td>
-        <td>m³</td><td>—</td>
-      </tr>
-      <tr>
-        <td class="label-cell">使用量 (m³)</td>
-        <td id="usage_${id}" style="font-weight:bold">—</td><td>m³</td><td>—</td>
-      </tr>
-      <tr>
-        <td class="label-cell">使用量 (kg)</td>
-        <td id="usage_kg_${id}" style="font-weight:bold">—</td><td>kg</td><td>—</td>
-      </tr>
-    </table>
-    <div class="tax-row" style="margin-top:8px;"><span id="tax_disp_${id}">消費税 —</span></div>
-    <div class="tax-row">前月繰越金 <input type="number" placeholder="0" style="width:100px;border:none;border-bottom:1px solid #999;font-size:13px;"></div>
-    <div class="footer-row">
-      <div>次回計算は　月　日頃です。<br>コード104 集金日は　月　日頃です。</div>
-      <div style="font-weight:bold;font-size:15px;" id="total_disp_${id}">計　—</div>
+
+      <div class="usage-field">
+        <label class="field-title" id="usage_title_${id}">使用量</label>
+        <div class="usage-grid">
+          <div class="usage-line" id="usage_line1_${id}">0.0m3 ÷ 0.48 = 0.0kg</div>
+          <div class="usage-line" id="usage_line2_${id}">0.0 ÷ 0.48 x 154.4 x 1.1 = 0円</div>
+        </div>
+      </div>
     </div>
   `;
-  document.getElementById('slips').appendChild(div);
+
+  tiles.appendChild(tile);
+  bindEnterNavigation(tile);
+  tile.querySelector(`#memo_${id}`).addEventListener('input', () => updateTileUsage(id));
+  tile.querySelector(`#cur_m3_${id}`).addEventListener('input', () => {
+    updateTileUsage(id);
+    recalcTotal();
+  });
+  tile.querySelector(`#prev_m3_${id}`).addEventListener('input', () => {
+    updateTileUsage(id);
+    recalcTotal();
+  });
+  updateTileUsage(id);
+  recalcTotal();
+  document.getElementById('add-tile-btn').disabled = tileCount >= MAX_TILES;
+  tile.querySelector(`#cur_m3_${id}`).focus();
 }
-addSlip();
+
+document.getElementById('add-tile-btn').addEventListener('click', addTile);
+document.querySelectorAll('.settings input').forEach((input) => {
+  input.addEventListener('input', () => {
+    updateAdjustedPriceDisplay();
+    syncAllTiles();
+    recalcTotal();
+  });
+});
+window.addEventListener('resize', updateStickyTop);
+
+updateAdjustedPriceDisplay();
+addTile();
 </script>
 </body>
 </html>
