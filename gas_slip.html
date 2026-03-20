@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LPガス 納品書（点検通知書）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "MS Mincho", "游明朝", serif; background: #f0f0f0; padding: 20px; }
+  .page { background: white; width: 760px; margin: 0 auto 40px; padding: 20px; border: 2px solid #333; }
+  .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .date-box { border: 1px solid #333; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; font-size: 14px; }
+  .date-box input { width: 40px; border: none; border-bottom: 1px solid #999; text-align: center; font-size: 14px; font-family: inherit; }
+  .company-info { text-align: right; font-size: 11px; line-height: 1.6; }
+  .customer-row { display: flex; align-items: baseline; gap: 8px; margin: 8px 0; font-size: 15px; }
+  .customer-row input { border: none; border-bottom: 1px solid #666; font-size: 15px; font-family: inherit; min-width: 200px; }
+  .doc-title { text-align: center; font-size: 16px; font-weight: bold; border: 1px solid #333; padding: 4px; margin: 6px 0; letter-spacing: 4px; }
+  .doc-subtitle { text-align: center; font-size: 10px; margin-bottom: 8px; }
+  .main-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .main-table th, .main-table td { border: 1px solid #333; padding: 3px 5px; text-align: center; vertical-align: middle; }
+  .main-table th { background: #eee; font-size: 11px; }
+  .main-table input[type="number"], .main-table input[type="text"] { width: 100%; border: none; text-align: center; font-size: 12px; font-family: inherit; background: transparent; }
+  .label-cell { text-align: left; font-size: 11px; background: #fafafa; }
+  .calc-box { border: 1px solid #999; padding: 8px 12px; margin: 8px 0; font-size: 13px; background: #fffef5; min-height: 60px; }
+  .calc-result { font-size: 18px; font-weight: bold; text-align: right; }
+  .footer-row { display: flex; justify-content: space-between; font-size: 11px; margin-top: 8px; }
+  .tax-row { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 4px 0; }
+  .settings { background: white; width: 760px; margin: 0 auto 40px; padding: 20px; border: 2px dashed #999; }
+  .settings h2 { font-size: 14px; margin-bottom: 12px; color: #555; border-bottom: 1px solid #ccc; padding-bottom: 6px; }
+  .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .setting-item { display: flex; flex-direction: column; gap: 4px; }
+  .setting-item label { font-size: 11px; color: #666; }
+  .setting-item input { border: 1px solid #ccc; padding: 5px 8px; font-size: 14px; font-family: inherit; border-radius: 3px; }
+  .btn-add { background: #5a8a2c; color: white; border: none; padding: 8px 18px; font-size: 13px; font-family: inherit; cursor: pointer; border-radius: 3px; margin: 0 auto 20px; display: block; }
+  .stamp-area { font-size: 10px; border: 1px solid #ccc; padding: 4px; text-align: center; width: 60px; }
+</style>
+</head>
+<body>
+
+<button class="btn-add" onclick="addSlip()">＋ 納品書を追加</button>
+<div id="slips"></div>
+
+<div class="settings">
+  <h2>⚙ 設定値（共通）</h2>
+  <div class="settings-grid">
+    <div class="setting-item">
+      <label>単価（円/kg）</label>
+      <input type="number" id="cfg_unit_price" value="154.4" step="0.1" onchange="recalcAll()">
+    </div>
+    <div class="setting-item">
+      <label>体積重量変換係数（m³→kg）</label>
+      <input type="number" id="cfg_conversion" value="0.48" step="0.01" onchange="recalcAll()">
+    </div>
+    <div class="setting-item">
+      <label>消費税率（例: 1.1 = 10%）</label>
+      <input type="number" id="cfg_tax" value="1.1" step="0.01" onchange="recalcAll()">
+    </div>
+    <div class="setting-item">
+      <label>基本料金（円）</label>
+      <input type="number" id="cfg_base" value="230" step="1" onchange="recalcAll()">
+    </div>
+  </div>
+</div>
+
+<script>
+let slipCount = 0;
+function getSettings() {
+  return {
+    unitPrice: parseFloat(document.getElementById('cfg_unit_price').value) || 0,
+    conversion: parseFloat(document.getElementById('cfg_conversion').value) || 1,
+    tax: parseFloat(document.getElementById('cfg_tax').value) || 1,
+    base: parseFloat(document.getElementById('cfg_base').value) || 0,
+  };
+}
+function calcSlip(id) {
+  const cfg = getSettings();
+  const cur = parseFloat(document.getElementById(`cur_${id}`).value) || 0;
+  const prev = parseFloat(document.getElementById(`prev_${id}`).value) || 0;
+  const usage_m3 = cur - prev;
+  const usage_kg = usage_m3 / cfg.conversion;
+  const subtotal = cfg.base + cfg.unitPrice * usage_kg * cfg.tax;
+  const tax_amount = Math.round(subtotal - subtotal / cfg.tax);
+  const total = Math.round(subtotal);
+  document.getElementById(`usage_${id}`).textContent = usage_m3.toFixed(1);
+  document.getElementById(`usage_kg_${id}`).textContent = usage_kg.toFixed(1);
+  const formula = `${usage_m3.toFixed(1)} m³ ÷ ${cfg.conversion} = ${usage_kg.toFixed(1)} kg　→　${cfg.base} + ${cfg.unitPrice} × ${usage_kg.toFixed(1)} × ${cfg.tax} = ${total.toLocaleString()} 円`;
+  document.getElementById(`calc_${id}`).textContent = formula;
+  document.getElementById(`result_${id}`).textContent = `= ${total.toLocaleString()} 円`;
+  document.getElementById(`tax_disp_${id}`).textContent = `消費税 ${tax_amount.toLocaleString()} 円`;
+  document.getElementById(`total_disp_${id}`).textContent = `計　${total.toLocaleString()} 円`;
+}
+function recalcAll() {
+  for (let i = 1; i <= slipCount; i++) {
+    if (document.getElementById(`cur_${i}`)) calcSlip(i);
+  }
+}
+function addSlip() {
+  slipCount++;
+  const id = slipCount;
+  const div = document.createElement('div');
+  div.className = 'page';
+  div.innerHTML = `
+    <div class="header-row">
+      <div class="date-box">
+        <input type="text" placeholder="年" style="width:36px"> 年
+        <input type="text" placeholder="月" style="width:28px"> 月
+        <input type="text" placeholder="日" style="width:28px"> 日
+      </div>
+      <div class="company-info">技術・サービスの店<br>㈱ 三ノ宮燃料<br>氷見市 仰田 6 2 4 1<br>TEL 9 1 - 4 1 1 1</div>
+    </div>
+    <div class="customer-row">
+      <input type="text" placeholder="お客様コード" style="width:80px">
+      <input type="text" placeholder="お客様名" style="width:240px"> 様
+      <div class="stamp-area">渡</div>
+    </div>
+    <div class="doc-title">納　品　書（点検通知書）</div>
+    <div class="doc-subtitle">当店のLPガスは現場責任住居検診です。</div>
+    <table class="main-table">
+      <tr><th>摘要</th><th>数量</th><th>単位</th><th>単価</th><th>金額</th></tr>
+      <tr>
+        <td class="label-cell">今回指針</td>
+        <td><input type="number" id="cur_${id}" placeholder="0" oninput="calcSlip(${id})"></td>
+        <td>m³</td><td>—</td>
+        <td rowspan="4">
+          <div class="calc-box" id="calc_${id}">今回・前回指針を入力してください</div>
+          <div class="calc-result" id="result_${id}"></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="label-cell">前回指針</td>
+        <td><input type="number" id="prev_${id}" placeholder="0" oninput="calcSlip(${id})"></td>
+        <td>m³</td><td>—</td>
+      </tr>
+      <tr>
+        <td class="label-cell">使用量 (m³)</td>
+        <td id="usage_${id}" style="font-weight:bold">—</td><td>m³</td><td>—</td>
+      </tr>
+      <tr>
+        <td class="label-cell">使用量 (kg)</td>
+        <td id="usage_kg_${id}" style="font-weight:bold">—</td><td>kg</td><td>—</td>
+      </tr>
+    </table>
+    <div class="tax-row" style="margin-top:8px;"><span id="tax_disp_${id}">消費税 —</span></div>
+    <div class="tax-row">前月繰越金 <input type="number" placeholder="0" style="width:100px;border:none;border-bottom:1px solid #999;font-size:13px;"></div>
+    <div class="footer-row">
+      <div>次回計算は　月　日頃です。<br>コード104 集金日は　月　日頃です。</div>
+      <div style="font-weight:bold;font-size:15px;" id="total_disp_${id}">計　—</div>
+    </div>
+  `;
+  document.getElementById('slips').appendChild(div);
+}
+addSlip();
+</script>
+</body>
+</html>
