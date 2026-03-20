@@ -1,6 +1,6 @@
 # gas_slip
 
-LPガス納品書（点検通知書）をブラウザで入力・計算するためのシンプルなHTMLファイルです。
+LPガス計算をブラウザで入力・確認するためのシンプルな静的ページです。GitHub Pages へそのまま置けます。
 
 ## このプロジェクトの目的
 
@@ -13,7 +13,8 @@ LPガス納品書（点検通知書）をブラウザで入力・計算するた
 
 ## ファイル
 
-- `gas_slip.html`: 納品書UI本体
+- `index.html`: GitHub Pages 公開用のエントリ
+- `gas_slip.html`: 作業用のHTML本体
 
 ## できること
 
@@ -25,10 +26,24 @@ LPガス納品書（点検通知書）をブラウザで入力・計算するた
 
 ## 使い方
 
-1. `gas_slip.html` をブラウザで開く
+1. `index.html` か `gas_slip.html` をブラウザで開く
 2. 必要に応じて共通設定を調整する
 3. 各納品書の指針値を入力する
 4. 計算結果を確認する
+
+## GitHub Pages 公開
+
+1. GitHub にこのリポジトリを push する
+2. GitHub の `Settings > Pages` を開く
+3. `Build and deployment` の `Source` を `Deploy from a branch` にする
+4. Branch は公開したいブランチ、フォルダは `/ (root)` を選ぶ
+5. 数分待って、払い出された Pages URL を開く
+
+## iPhone Safari メモ
+
+- 入力欄は 16px にして、フォーカス時の自動ズームを抑えている
+- `viewport-fit=cover` と safe area 対応を入れて、ノッチ端末でも余白が詰まりにくい
+- sticky ヘッダは iPhone Safari を意識して上端位置を補正している
 
 ## メモ
 
