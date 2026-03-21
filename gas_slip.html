@@ -73,6 +73,14 @@
     box-shadow: 0 12px 22px rgba(184, 92, 56, 0.18);
   }
 
+  .btn-secondary {
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.78);
+    color: #6b5845;
+    border: 1px solid #d7cab8;
+    box-shadow: none;
+  }
+
   .btn:disabled {
     opacity: 0.4;
     cursor: default;
@@ -185,14 +193,6 @@
     background: #efeadf;
     border-bottom: 2px solid #d7cab8;
     border-radius: 18px 18px 0 0;
-  }
-
-  .card-label {
-    font-size: 16px;
-    font-weight: 900;
-    color: #74563f;
-    line-height: 1;
-    padding-left: 8px;
   }
 
   .card-head-stats {
@@ -624,11 +624,6 @@
       padding: 6px 7px;
     }
 
-    .card-label {
-      font-size: 13px;
-      padding-left: 2px;
-    }
-
     .card-head-stats {
       gap: 6px;
       justify-content: flex-start;
@@ -758,6 +753,10 @@
       padding: 6px 11px;
       font-size: 10px;
     }
+
+    .btn-secondary {
+      padding: 4px 8px;
+    }
   }
 </style>
 </head>
@@ -795,7 +794,7 @@
     <main class="main">
       <article class="panel total-card">
         <div class="card-head">
-          <div class="card-label">GAS-SLIP</div>
+          <button class="btn btn-secondary" type="button" id="reset-btn">クリア</button>
           <div class="card-head-stats">
             <div class="card-head-stat card-head-stat-primary">
               <strong>使用量</strong>
@@ -882,6 +881,12 @@
 
 <script>
 const MAX_TILES = 20;
+const INITIAL_SETTINGS = {
+  basePrice: '143.4',
+  margin: '11',
+  conversion: '0.48',
+  tax: '1.1',
+};
 let tileCount = 0;
 
 function truncateDecimals(value, digits) {
@@ -1046,6 +1051,17 @@ function bindEnterNavigation(root) {
   });
 }
 
+function resetApp() {
+  document.getElementById('cfg_base_price').value = INITIAL_SETTINGS.basePrice;
+  document.getElementById('cfg_tax_amount').value = INITIAL_SETTINGS.margin;
+  document.getElementById('cfg_conversion').value = INITIAL_SETTINGS.conversion;
+  document.getElementById('cfg_tax').value = INITIAL_SETTINGS.tax;
+  document.getElementById('tiles').innerHTML = '';
+  tileCount = 0;
+  updateAdjustedPriceDisplay();
+  addTile();
+}
+
 function addTile() {
   if (tileCount >= MAX_TILES) return;
   tileCount += 1;
@@ -1118,6 +1134,7 @@ function addTile() {
 }
 
 document.getElementById('add-tile-btn').addEventListener('click', addTile);
+document.getElementById('reset-btn').addEventListener('click', resetApp);
 document.querySelectorAll('.settings input').forEach((input) => {
   input.addEventListener('input', () => {
     updateAdjustedPriceDisplay();
