@@ -58,19 +58,6 @@
     backdrop-filter: blur(8px);
   }
 
-  .hero {
-    display: flex;
-    align-items: center;
-    margin-bottom: 4px;
-  }
-
-  .hero h1 {
-    margin: 0;
-    font-size: clamp(13px, 3.4vw, 16px);
-    letter-spacing: 0.12em;
-    font-weight: 700;
-  }
-
   .btn {
     border: none;
     border-radius: 999px;
@@ -100,34 +87,48 @@
   }
 
   .settings {
-    padding: 8px 8px 6px;
+    padding: 6px 8px 5px;
+    border-color: #e6ddd0;
+    background: rgba(255, 252, 246, 0.9);
+    box-shadow: none;
   }
 
   .settings-grid {
     display: grid;
-    grid-template-columns: 0.45fr auto 0.45fr auto max-content 0.45fr 0.45fr;
-    gap: 6px;
+    grid-template-columns: 0.55fr auto 0.55fr auto max-content 0.45fr 0.45fr;
+    gap: 4px 6px;
     align-items: end;
   }
 
   .setting-item-display {
-    display: flex;
+    display: grid;
+    gap: 1px;
     align-items: end;
-    justify-content: flex-start;
-    padding-right: 22px;
-    padding-bottom: 6px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #74563f;
+    justify-items: start;
+    padding-right: 12px;
+    padding-bottom: 4px;
     white-space: nowrap;
+  }
+
+  .setting-item-display strong {
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .setting-item-display span {
+    font-size: 11px;
+    font-weight: 800;
+    color: #74563f;
   }
 
   .setting-operator {
     display: flex;
     align-items: end;
     justify-content: center;
-    padding-bottom: 8px;
-    font-size: 12px;
+    padding-bottom: 6px;
+    font-size: 10px;
     font-weight: 900;
     color: #8c7862;
     white-space: nowrap;
@@ -144,11 +145,12 @@
   .setting-item input {
     width: 100%;
     border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 6px 7px;
+    border-radius: 7px;
+    padding: 4px 6px;
     background: #fff;
     color: var(--text);
-    font-size: 16px;
+    font-size: 13px;
+    line-height: 1.2;
     font-family: inherit;
     appearance: none;
     -webkit-appearance: none;
@@ -215,12 +217,24 @@
     white-space: nowrap;
   }
 
+  .card-head-stat-primary strong {
+    color: var(--text);
+  }
+
   .card-head-stat span {
     font-size: 18px;
     font-weight: 900;
     color: #74563f;
     line-height: 1;
     white-space: nowrap;
+  }
+
+  .card-head-stat-primary span {
+    color: var(--text);
+  }
+
+  .card-head-stat-cost span {
+    font-size: 14px;
   }
 
   #head_total_amount {
@@ -305,6 +319,10 @@
     background: color-mix(in srgb, var(--tile-bg) 18%, #ffffff 82%);
     border-color: color-mix(in srgb, var(--tile-line) 55%, #ffffff 45%);
     border-width: 2px;
+  }
+
+  .usage-field .field-title {
+    color: var(--text);
   }
 
   .field-title {
@@ -393,10 +411,32 @@
     gap: 6px;
   }
 
+  .usage-label {
+    display: inline-block;
+    min-width: 3.8em;
+    margin-right: 6px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: var(--text);
+  }
+
+  .usage-line-cost .usage-label {
+    color: var(--tile-line);
+  }
+
   .usage-line {
     font-size: 13px;
     line-height: 1.5;
     color: color-mix(in srgb, var(--tile-line) 70%, #244333 30%);
+  }
+
+  .usage-line-cost {
+    font-size: 11px;
+  }
+
+  .usage-line-cost .usage-line-strong {
+    color: var(--tile-line);
   }
 
   .usage-line-strong {
@@ -469,11 +509,19 @@
     color: #74563f;
   }
 
+  .result-main-primary strong {
+    color: var(--text);
+  }
+
   .result-main span {
     font-size: clamp(24px, 8vw, 34px);
     font-weight: 900;
     color: #74563f;
     letter-spacing: 0.04em;
+  }
+
+  .result-main-primary span {
+    color: var(--text);
   }
 
   .result-breakdown {
@@ -493,6 +541,10 @@
     grid-template-columns: 1fr 1fr 1fr;
     gap: 8px;
     align-items: baseline;
+  }
+
+  .result-row-spacer {
+    min-height: 8px;
   }
 
   .result-cell {
@@ -545,6 +597,11 @@
 
     .settings {
       padding: 6px;
+    }
+
+    .setting-item input {
+      font-size: 16px;
+      padding: 3px 5px;
     }
 
     .setting-operator,
@@ -707,23 +764,22 @@
 <body>
   <div class="app">
     <div class="app-header">
-      <header class="hero">
-        <h1>GAS-SLIP</h1>
-      </header>
-
       <aside class="panel settings">
         <div class="settings-grid">
           <div class="setting-item">
-            <label for="cfg_base_price">単価</label>
+            <label for="cfg_base_price">仕入単価</label>
             <input type="number" id="cfg_base_price" value="143.4" step="0.1" inputmode="decimal" enterkeyhint="next">
           </div>
           <div class="setting-operator">+</div>
           <div class="setting-item">
-            <label for="cfg_tax_amount">補正額</label>
+            <label for="cfg_tax_amount">マージン</label>
             <input type="number" id="cfg_tax_amount" value="11" step="0.1" inputmode="decimal" enterkeyhint="next">
           </div>
           <div class="setting-operator">=</div>
-          <div class="setting-item-display" id="cfg_adjusted_price_display">154.4円</div>
+          <div class="setting-item-display">
+            <strong>売単価</strong>
+            <span id="cfg_adjusted_price_display">154.4円</span>
+          </div>
           <div class="setting-item">
             <label for="cfg_conversion">換算係数</label>
             <input type="number" id="cfg_conversion" value="0.48" step="0.01" inputmode="decimal" enterkeyhint="next">
@@ -739,15 +795,19 @@
     <main class="main">
       <article class="panel total-card">
         <div class="card-head">
-          <div class="card-label">TOTAL</div>
+          <div class="card-label">GAS-SLIP</div>
           <div class="card-head-stats">
-            <div class="card-head-stat">
+            <div class="card-head-stat card-head-stat-primary">
               <strong>使用量</strong>
               <span id="head_total_usage">0.0kg</span>
             </div>
-            <div class="card-head-stat">
-              <strong>税込</strong>
+            <div class="card-head-stat card-head-stat-primary">
+              <strong>売価</strong>
               <span id="head_total_amount">0円</span>
+            </div>
+            <div class="card-head-stat card-head-stat-cost">
+              <strong>買価</strong>
+              <span id="head_total_cost">0円</span>
             </div>
           </div>
         </div>
@@ -768,25 +828,25 @@
               </div>
 
               <div class="formula-step">
-                <strong>合計金額（補正）</strong>
+                <strong>合計売価</strong>
                 <div id="total_formula">0.0 ÷ 0.48 × 154.4 × 1.10 = 0 円</div>
               </div>
 
               <div class="result-box">
-                <div class="result-main">
-                  <strong id="grand_total_label">税込</strong>
+                <div class="result-main result-main-primary">
+                  <strong id="grand_total_label">売価</strong>
                   <span id="grand_total">0円</span>
                 </div>
                 <div class="result-breakdown">
                   <div class="result-table">
                     <div class="result-row result-head">
                       <div class="result-cell">数量(kg)</div>
-                      <div class="result-cell">単価</div>
-                      <div class="result-cell">金額</div>
+                      <div class="result-cell">売単価</div>
+                      <div class="result-cell">税抜売価</div>
                     </div>
                     <div class="result-row">
                       <div class="result-cell result-value" id="grand_qty">0.0</div>
-                      <div class="result-cell result-value" id="grand_unit">143.4</div>
+                      <div class="result-cell result-value" id="grand_unit">154.4</div>
                       <div class="result-cell result-value" id="grand_amount">0円</div>
                     </div>
                     <div class="result-row">
@@ -796,8 +856,19 @@
                     </div>
                     <div class="result-row result-total">
                       <div class="result-cell"></div>
-                      <div class="result-cell">計</div>
+                      <div class="result-cell">合計売価</div>
                       <div class="result-cell result-value" id="grand_sum">0円</div>
+                    </div>
+                    <div class="result-row-spacer" aria-hidden="true"></div>
+                    <div class="result-row result-head">
+                      <div class="result-cell">数量(kg)</div>
+                      <div class="result-cell">買単価</div>
+                      <div class="result-cell">買価</div>
+                    </div>
+                    <div class="result-row">
+                      <div class="result-cell result-value" id="grand_qty_cost">0.0</div>
+                      <div class="result-cell result-value" id="grand_base_unit">143.4</div>
+                      <div class="result-cell result-value" id="grand_base_amount">0円</div>
                     </div>
                   </div>
                 </div>
@@ -835,11 +906,11 @@ function formatYen(value) {
 
 function getSettings() {
   const basePrice = parseFloat(document.getElementById('cfg_base_price').value) || 0;
-  const taxAmount = parseFloat(document.getElementById('cfg_tax_amount').value) || 0;
+  const margin = parseFloat(document.getElementById('cfg_tax_amount').value) || 0;
   return {
     basePrice,
-    taxAmount,
-    unitPrice: basePrice + taxAmount,
+    margin,
+    sellUnitPrice: basePrice + margin,
     conversion: parseFloat(document.getElementById('cfg_conversion').value) || 1,
     tax: parseFloat(document.getElementById('cfg_tax').value) || 1,
   };
@@ -853,8 +924,8 @@ function updateStickyTop() {
 
 function updateAdjustedPriceDisplay() {
   const basePrice = parseFloat(document.getElementById('cfg_base_price').value) || 0;
-  const taxAmount = parseFloat(document.getElementById('cfg_tax_amount').value) || 0;
-  const adjusted = basePrice + taxAmount;
+  const margin = parseFloat(document.getElementById('cfg_tax_amount').value) || 0;
+  const adjusted = basePrice + margin;
   document.getElementById('cfg_adjusted_price_display').textContent =
     `${formatNumber(adjusted, 1)}円`;
 }
@@ -868,7 +939,7 @@ function getSummaryLabel() {
     if (title) titles.push(title);
   }
 
-  return titles.length ? `${titles.join('/')} 税込` : '税込';
+  return titles.length ? `${titles.join('/')} 売価` : '売価';
 }
 
 function getTileUsage(id) {
@@ -890,20 +961,26 @@ function updateTileUsage(id) {
   const usageM3 = getTileUsage(id);
   const usageKgRaw = cfg.conversion === 0 ? 0 : usageM3 / cfg.conversion;
   const usageKg = cfg.conversion === 0 ? 0 : truncateDecimals(usageKgRaw, 1);
-  const amount = Math.round(usageKgRaw * cfg.unitPrice * cfg.tax);
+  const buyAmount = Math.round(usageKgRaw * cfg.basePrice);
+  const sellPreTax = Math.round(usageKgRaw * cfg.sellUnitPrice);
+  const sellAmount = Math.round(sellPreTax * cfg.tax);
   const conversionText = formatNumber(truncateDecimals(cfg.conversion, 2), 2);
 
   document.getElementById(`cur_kg_hint_${id}`).textContent = `${formatTruncated(curKg, 1)} kg`;
   document.getElementById(`prev_kg_hint_${id}`).textContent = `${formatTruncated(prevKg, 1)} kg`;
-  document.getElementById(`usage_title_${id}`).textContent = memoValue ? `${memoValue} 使用量` : '使用量';
+  document.getElementById(`usage_title_${id}`).textContent = memoValue || '使用量・売価';
   document.getElementById(`usage_line1_${id}`).textContent =
     '';
   document.getElementById(`usage_line1_${id}`).innerHTML =
-    `<span class="usage-line-strong">${formatTruncated(usageM3, 1)}㎥</span> ÷ ${conversionText} = ${formatTruncated(usageKg, 1)}kg`;
+    `<span class="usage-label">使用量</span><span class="usage-line-strong">${formatTruncated(usageKg, 1)}kg</span> <span class="inline-strong">(${formatTruncated(usageM3, 1)}㎥)</span>`;
   document.getElementById(`usage_line2_${id}`).textContent =
     '';
   document.getElementById(`usage_line2_${id}`).innerHTML =
-    `${formatTruncated(usageM3, 1)} ÷ ${conversionText} x <span class="inline-strong">${formatNumber(cfg.unitPrice, 1)}</span> x ${formatNumber(cfg.tax, 1)} = <span class="usage-line-strong">${amount.toLocaleString('ja-JP')}円</span>`;
+    `<span class="usage-label">売価</span><span class="usage-line-strong">${sellAmount.toLocaleString('ja-JP')}円</span> <span class="inline-strong">(${formatTruncated(usageM3, 1)} ÷ ${conversionText} × ${formatNumber(cfg.sellUnitPrice, 1)} × ${formatNumber(cfg.tax, 2)})</span>`;
+  document.getElementById(`usage_line3_${id}`).textContent =
+    '';
+  document.getElementById(`usage_line3_${id}`).innerHTML =
+    `<span class="usage-label">買価</span><span class="usage-line-strong usage-line-cost">${buyAmount.toLocaleString('ja-JP')}円</span>`;
 }
 
 function syncAllTiles() {
@@ -928,9 +1005,9 @@ function recalcTotal() {
   totalUsageM3 = truncateDecimals(totalUsageM3, 1);
   const totalUsageKgRaw = cfg.conversion === 0 ? 0 : totalUsageM3 / cfg.conversion;
   const totalUsageKg = cfg.conversion === 0 ? 0 : truncateDecimals(totalUsageKgRaw, 1);
-  const adjustedAmount = Math.round(totalUsageKgRaw * cfg.unitPrice * cfg.tax);
-  const lineAmount = Math.floor(totalUsageKg * cfg.basePrice);
-  const taxValue = Math.floor(lineAmount * (cfg.tax - 1));
+  const baseAmount = Math.round(totalUsageKgRaw * cfg.basePrice);
+  const lineAmount = Math.round(totalUsageKgRaw * cfg.sellUnitPrice);
+  const taxValue = Math.round(lineAmount * (cfg.tax - 1));
   const summaryAmount = lineAmount + taxValue;
   const conversionText = formatNumber(truncateDecimals(cfg.conversion, 2), 2);
   const joinedUsage = usageParts.length ? usageParts.map((part) => `${part}㎥`).join(' + ') : '0.0㎥';
@@ -938,15 +1015,19 @@ function recalcTotal() {
   document.getElementById('total_usage_m3').innerHTML =
     `${joinedUsage} = <span class="formula-strong">${formatTruncated(totalUsageM3, 1)}㎥</span> ÷ ${conversionText} = <span class="formula-strong">${formatTruncated(totalUsageKg, 1)}kg</span>`;
   document.getElementById('total_formula').innerHTML =
-    `${formatTruncated(totalUsageM3, 1)} ÷ ${conversionText} × <span class="inline-strong">${formatNumber(cfg.unitPrice, 1)}</span> × ${formatNumber(cfg.tax, 2)} = <span class="formula-strong">${adjustedAmount.toLocaleString('ja-JP')}円</span>`;
+    `${formatTruncated(totalUsageM3, 1)} ÷ ${conversionText} × <span class="inline-strong">${formatNumber(cfg.sellUnitPrice, 1)}</span> × ${formatNumber(cfg.tax, 2)} = <span class="formula-strong">${summaryAmount.toLocaleString('ja-JP')}円</span>`;
   document.getElementById('grand_total_label').textContent = getSummaryLabel();
   document.getElementById('grand_total').textContent = formatYen(summaryAmount);
   document.getElementById('grand_qty').textContent = `${formatTruncated(totalUsageKg, 1)}`;
-  document.getElementById('grand_unit').textContent = `${formatNumber(cfg.basePrice, 1)}`;
+  document.getElementById('grand_qty_cost').textContent = `${formatTruncated(totalUsageKg, 1)}`;
+  document.getElementById('grand_base_unit').textContent = `${formatNumber(cfg.basePrice, 1)}`;
+  document.getElementById('grand_base_amount').textContent = `${baseAmount.toLocaleString('ja-JP')}円`;
+  document.getElementById('grand_unit').textContent = `${formatNumber(cfg.sellUnitPrice, 1)}`;
   document.getElementById('grand_amount').textContent = `${lineAmount.toLocaleString('ja-JP')}円`;
   document.getElementById('grand_tax').textContent = `${taxValue.toLocaleString('ja-JP')}円`;
   document.getElementById('grand_sum').textContent = `${summaryAmount.toLocaleString('ja-JP')}円`;
   document.getElementById('head_total_usage').textContent = `${formatTruncated(totalUsageKg, 1)}kg`;
+  document.getElementById('head_total_cost').textContent = `${baseAmount.toLocaleString('ja-JP')}円`;
   document.getElementById('head_total_amount').textContent = `${summaryAmount.toLocaleString('ja-JP')}円`;
   updateStickyTop();
 }
@@ -1006,10 +1087,11 @@ function addTile() {
       </div>
 
       <div class="usage-field">
-        <label class="field-title" id="usage_title_${id}">使用量</label>
+        <label class="field-title" id="usage_title_${id}">使用量・売価</label>
         <div class="usage-grid">
-          <div class="usage-line" id="usage_line1_${id}">0.0m3 ÷ 0.48 = 0.0kg</div>
-          <div class="usage-line" id="usage_line2_${id}">0.0 ÷ 0.48 x 154.4 x 1.1 = 0円</div>
+          <div class="usage-line" id="usage_line1_${id}">使用量 0.0kg (0.0㎥)</div>
+          <div class="usage-line" id="usage_line2_${id}">売価 0円 (0.0 ÷ 0.48 × 154.4 × 1.10)</div>
+          <div class="usage-line usage-line-cost" id="usage_line3_${id}">買価 0円</div>
         </div>
       </div>
     </div>
