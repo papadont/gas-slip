@@ -885,6 +885,16 @@
                       <div class="result-cell result-value" id="grand_base_unit">143.4</div>
                       <div class="result-cell result-value" id="grand_base_amount">0円</div>
                     </div>
+                    <div class="result-row">
+                      <div class="result-cell"></div>
+                      <div class="result-cell">消費税</div>
+                      <div class="result-cell result-value" id="grand_base_tax">0円</div>
+                    </div>
+                    <div class="result-row result-total">
+                      <div class="result-cell"></div>
+                      <div class="result-cell">合計買価</div>
+                      <div class="result-cell result-value" id="grand_base_sum">0円</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -982,7 +992,7 @@ function updateTileUsage(id) {
   const usageM3 = getTileUsage(id);
   const usageKgRaw = cfg.conversion === 0 ? 0 : usageM3 / cfg.conversion;
   const usageKg = cfg.conversion === 0 ? 0 : truncateDecimals(usageKgRaw, 1);
-  const buyAmount = Math.round(usageKgRaw * cfg.basePrice);
+  const buyAmount = Math.floor(usageKg * cfg.basePrice);
   const sellPreTax = Math.round(usageKgRaw * cfg.sellUnitPrice);
   const sellAmount = Math.round(sellPreTax * cfg.tax);
   const conversionText = formatNumber(truncateDecimals(cfg.conversion, 2), 2);
@@ -1026,7 +1036,9 @@ function recalcTotal() {
   totalUsageM3 = truncateDecimals(totalUsageM3, 1);
   const totalUsageKgRaw = cfg.conversion === 0 ? 0 : totalUsageM3 / cfg.conversion;
   const totalUsageKg = cfg.conversion === 0 ? 0 : truncateDecimals(totalUsageKgRaw, 1);
-  const baseAmount = Math.round(totalUsageKgRaw * cfg.basePrice);
+  const baseAmount = Math.floor(totalUsageKg * cfg.basePrice);
+  const baseTaxValue = Math.floor(baseAmount * (cfg.tax - 1));
+  const baseSummaryAmount = baseAmount + baseTaxValue;
   const lineAmount = Math.round(totalUsageKgRaw * cfg.sellUnitPrice);
   const taxValue = Math.round(lineAmount * (cfg.tax - 1));
   const summaryAmount = lineAmount + taxValue;
@@ -1043,12 +1055,14 @@ function recalcTotal() {
   document.getElementById('grand_qty_cost').textContent = `${formatTruncated(totalUsageKg, 1)}`;
   document.getElementById('grand_base_unit').textContent = `${formatNumber(cfg.basePrice, 1)}`;
   document.getElementById('grand_base_amount').textContent = `${baseAmount.toLocaleString('ja-JP')}円`;
+  document.getElementById('grand_base_tax').textContent = `${baseTaxValue.toLocaleString('ja-JP')}円`;
+  document.getElementById('grand_base_sum').textContent = `${baseSummaryAmount.toLocaleString('ja-JP')}円`;
   document.getElementById('grand_unit').textContent = `${formatNumber(cfg.sellUnitPrice, 1)}`;
   document.getElementById('grand_amount').textContent = `${lineAmount.toLocaleString('ja-JP')}円`;
   document.getElementById('grand_tax').textContent = `${taxValue.toLocaleString('ja-JP')}円`;
   document.getElementById('grand_sum').textContent = `${summaryAmount.toLocaleString('ja-JP')}円`;
   document.getElementById('head_total_usage').textContent = `${formatTruncated(totalUsageKg, 1)}kg`;
-  document.getElementById('head_total_cost').textContent = `${baseAmount.toLocaleString('ja-JP')}円`;
+  document.getElementById('head_total_cost').textContent = `${baseSummaryAmount.toLocaleString('ja-JP')}円`;
   document.getElementById('head_total_amount').textContent = `${summaryAmount.toLocaleString('ja-JP')}円`;
   updateStickyTop();
 }
